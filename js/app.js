@@ -281,10 +281,21 @@ const App = {
             await ScheduleImageGenerator.generateScheduleImage();
         });
 
-        // 重置数据按钮
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            this.resetAllData();
-        });
+        // 重置数据按钮（侧边栏）
+        const resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                this.resetAllData();
+            });
+        }
+        
+        // 重置数据按钮（主页）
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        if (resetDataBtn) {
+            resetDataBtn.addEventListener('click', () => {
+                this.resetAllData();
+            });
+        }
 
         // 初始化数据按钮（仅在出错时显示）
         const initBtn = document.getElementById('initDataBtn');

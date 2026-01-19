@@ -63,6 +63,12 @@
             .nav-tab.active {
                 background: rgba(255,255,255,0.3) !important;
             }
+            
+            /* 移动端重置按钮优化 */
+            #resetDataBtn {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
         }
     </style>
     <link rel="stylesheet" href="css/styles.css?v=3">
@@ -100,6 +106,7 @@
                     <button class="btn btn-secondary" id="nextWeek">下一周 →</button>
                     <button class="btn btn-primary" id="todayBtn">今天</button>
                     <button class="btn btn-success" id="generateScheduleBtn">📊 生成排班表</button>
+                    <button class="btn btn-danger" id="resetDataBtn">🔄 重置数据</button>
                     <button class="btn btn-warning" id="initDataBtn" style="display: none;">🔄 初始化数据</button>
                 </div>
                 <div class="calendar-container">

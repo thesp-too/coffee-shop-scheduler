@@ -108,9 +108,9 @@ const App = {
             
             // 创建默认班次
             const defaultShifts = [
-                { id: Storage.generateId(), name: '早班', startTime: '07:00', endTime: '14:00', color: '#3498db', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '中班', startTime: '14:00', endTime: '21:00', color: '#2ecc71', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '晚班', startTime: '21:00', endTime: '23:00', color: '#9b59b6', createdAt: new Date().toISOString() }
+                { id: Storage.generateId(), name: '早班', startTime: '08:00', endTime: '15:00', color: '#3498db', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '中班', startTime: '15:00', endTime: '22:00', color: '#2ecc71', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '全班', startTime: '08:00', endTime: '22:00', color: '#f39c12', createdAt: new Date().toISOString() }
             ];
             Storage.saveShifts(defaultShifts);
             

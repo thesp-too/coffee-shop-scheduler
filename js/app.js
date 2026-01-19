@@ -96,13 +96,13 @@ const App = {
             const defaultStores = [
                 { id: 'store1', name: '联庄', address: '', phone: '' },
                 { id: 'store2', name: '余杭', address: '', phone: '' },
-                { id: 'store3', name: '开元', address: '', phone: '' },
-                { id: 'store4', name: '浣纱', address: '', phone: '' },
+                { id: 'store3', name: '星光', address: '', phone: '' },
+                { id: 'store4', name: '开元', address: '', phone: '' },
                 { id: 'store5', name: '山泽里', address: '', phone: '' },
-                { id: 'store6', name: '泰隆', address: '', phone: '' },
-                { id: 'store7', name: '城西', address: '', phone: '' },
-                { id: 'store8', name: '工厂', address: '', phone: '' },
-                { id: 'store9', name: '星光', address: '', phone: '' }
+                { id: 'store6', name: '采荷', address: '', phone: '' },
+                { id: 'store7', name: '泰隆', address: '', phone: '' },
+                { id: 'store8', name: '浣纱', address: '', phone: '' },
+                { id: 'store9', name: '工厂', address: '', phone: '' }
             ];
             Storage.saveStores(defaultStores);
             

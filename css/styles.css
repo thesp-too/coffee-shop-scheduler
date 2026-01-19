@@ -492,17 +492,18 @@ body {
 
 @media (max-width: 768px) {
     .header {
-        padding: 1rem;
+        padding: 0.8rem 1rem;
     }
     
     .header h1 {
-        font-size: 1.3rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+        margin-bottom: 0;
     }
     
-    /* 移动端隐藏导航标签 */
-    .nav-tabs {
-        display: none;
+    /* 移动端完全隐藏导航标签 */
+    .nav-tabs,
+    .hide-on-mobile {
+        display: none !important;
     }
     
     .nav-tab {
@@ -511,7 +512,7 @@ body {
     }
     
     .main-content {
-        padding: 0.5rem;
+        padding: 0.3rem;
     }
     
     .employee-list,
@@ -536,8 +537,8 @@ body {
     }
     
     .calendar-controls .btn {
-        font-size: 0.85rem;
-        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
     }
     
     #generateScheduleBtn {

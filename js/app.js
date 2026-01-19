@@ -118,19 +118,21 @@ const App = {
             const defaultEmployees = [
                 { id: Storage.generateId(), name: '欣怡', position: '咖啡师', phone: '', email: '', color: '#e74c3c', createdAt: new Date().toISOString() },
                 { id: Storage.generateId(), name: '小酒', position: '咖啡师', phone: '', email: '', color: '#3498db', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '怡彤', position: '咖啡师', phone: '', email: '', color: '#9b59b6', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '梦婷', position: '咖啡师', phone: '', email: '', color: '#f39c12', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '丹妮', position: '咖啡师', phone: '', email: '', color: '#1abc9c', createdAt: new Date().toISOString() },
                 { id: Storage.generateId(), name: '等等', position: '咖啡师', phone: '', email: '', color: '#2ecc71', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '陈润琳', position: '咖啡师', phone: '', email: '', color: '#e67e22', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '林惠宇', position: '咖啡师', phone: '', email: '', color: '#34495e', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '一筒', position: '咖啡师', phone: '', email: '', color: '#16a085', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '小雷', position: '咖啡师', phone: '', email: '', color: '#8e44ad', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '怡彤', position: '咖啡师', phone: '', email: '', color: '#9b59b6', createdAt: new Date().toISOString() },
                 { id: Storage.generateId(), name: '小周', position: '咖啡师', phone: '', email: '', color: '#c0392b', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '梦婷', position: '咖啡师', phone: '', email: '', color: '#f39c12', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '小雷', position: '咖啡师', phone: '', email: '', color: '#8e44ad', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '丹尼', position: '咖啡师', phone: '', email: '', color: '#1abc9c', createdAt: new Date().toISOString() },
                 { id: Storage.generateId(), name: '小辞', position: '咖啡师', phone: '', email: '', color: '#d35400', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '一筒', position: '咖啡师', phone: '', email: '', color: '#16a085', createdAt: new Date().toISOString() },
                 { id: Storage.generateId(), name: '阿乐', position: '咖啡师', phone: '', email: '', color: '#7f8c8d', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '晓烟', position: '咖啡师', phone: '', email: '', color: '#27ae60', createdAt: new Date().toISOString() },
-                { id: Storage.generateId(), name: '梅姐', position: '咖啡师', phone: '', email: '', color: '#8B4513', createdAt: new Date().toISOString() }
+                { id: Storage.generateId(), name: '梁瑞', position: '咖啡师', phone: '', email: '', color: '#e67e22', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '爱玲', position: '咖啡师', phone: '', email: '', color: '#27ae60', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '小宇', position: '咖啡师', phone: '', email: '', color: '#34495e', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '塔塔', position: '咖啡师', phone: '', email: '', color: '#8B4513', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '立思', position: '咖啡师', phone: '', email: '', color: '#2c3e50', createdAt: new Date().toISOString() },
+                { id: Storage.generateId(), name: '曲曲', position: '咖啡师', phone: '', email: '', color: '#e84393', createdAt: new Date().toISOString() }
             ];
             Storage.saveEmployees(defaultEmployees);
             

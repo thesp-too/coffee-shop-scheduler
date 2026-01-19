@@ -496,11 +496,13 @@ body {
     }
     
     .header h1 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
     }
     
+    /* 移动端隐藏导航标签 */
     .nav-tabs {
-        flex-wrap: wrap;
+        display: none;
     }
     
     .nav-tab {
@@ -509,7 +511,7 @@ body {
     }
     
     .main-content {
-        padding: 1rem;
+        padding: 0.5rem;
     }
     
     .employee-list,
@@ -526,6 +528,25 @@ body {
     .modal-content {
         width: 95%;
         margin: 1rem;
+    }
+    
+    /* 移动端按钮优化 */
+    .calendar-controls {
+        padding: 0.5rem;
+    }
+    
+    .calendar-controls .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.8rem;
+    }
+    
+    #generateScheduleBtn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    #initDataBtn {
+        width: 100%;
     }
 }
 

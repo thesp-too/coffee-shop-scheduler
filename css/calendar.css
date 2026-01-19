@@ -3,9 +3,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
     flex-wrap: wrap;
+    padding: 0.5rem;
 }
 
 .current-week {
@@ -49,11 +50,12 @@
 
 .calendar-day {
     border: 1px solid var(--border-color);
-    min-height: 120px;
-    padding: 0.5rem;
+    min-height: 100px;
+    padding: 0.3rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
     position: relative;
+    overflow: hidden;
 }
 
 .calendar-day:hover {
@@ -338,4 +340,80 @@
 .day-stat-value {
     font-weight: 600;
     color: var(--primary-color);
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .calendar-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .calendar-controls .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .current-week {
+        font-size: 0.95rem;
+        order: -1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .store-selector-wrapper {
+        width: 100%;
+        order: -2;
+    }
+    
+    /* 日历表头简化 */
+    .day-header {
+        padding: 0.5rem 0.2rem;
+        font-size: 0.75rem;
+    }
+    
+    /* 日历单元格优化 */
+    .calendar-day {
+        min-height: 80px;
+        padding: 0.2rem;
+    }
+    
+    .day-number {
+        font-size: 0.9rem;
+    }
+    
+    .day-month {
+        font-size: 0.7rem;
+    }
+    
+    /* 班次项优化 */
+    .shift-item {
+        padding: 0.3rem 0.4rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
+        border-radius: 3px;
+    }
+    
+    .shift-item-name {
+        font-size: 0.7rem;
+    }
+    
+    .shift-item-time {
+        font-size: 0.6rem;
+    }
+    
+    .add-shift-btn {
+        padding: 0.3rem;
+        font-size: 0.7rem;
+        margin-top: 0.2rem;
+    }
+    
+    /* 隐藏天气信息以节省空间 */
+    .day-weather {
+        display: none;
+    }
+    
+    /* 统计信息优化 */
+    .day-stats {
+        display: none;
+    }
 }

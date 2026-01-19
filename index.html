@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百分之一员工排班系统</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>☕ 百分之一员工排班系统</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="schedule">排班日历</button>
+                <button class="nav-tab" data-tab="employees">员工管理</button>
+                <button class="nav-tab" data-tab="shifts">班次设置</button>
+                <button class="nav-tab" data-tab="stores">分店管理</button>
+            </nav>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 排班日历视图 -->
+            <section id="schedule-view" class="view active">
+                <div class="calendar-controls">
+                    <div class="store-selector-wrapper">
+                        <label for="storeSelector">选择分店:</label>
+                        <select id="storeSelector" class="store-selector">
+                            <!-- 分店列表将由JavaScript动态生成 -->
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" id="prevWeek">← 上一周</button>
+                    <span class="current-week" id="currentWeek"></span>
+                    <button class="btn btn-secondary" id="nextWeek">下一周 →</button>
+                    <button class="btn btn-primary" id="todayBtn">今天</button>
+                    <button class="btn btn-success" id="generateScheduleBtn">📊 生成排班表</button>
+                    <button class="btn btn-warning" id="initDataBtn" style="display: none;">🔄 初始化数据</button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="day-header">周一</div>
+                        <div class="day-header">周二</div>
+                        <div class="day-header">周三</div>
+                        <div class="day-header">周四</div>
+                        <div class="day-header">周五</div>
+                        <div class="day-header">周六</div>
+                        <div class="day-header">周日</div>
+                    </div>
+                    <div class="calendar-body" id="calendarBody">
+                        <!-- 日历内容将由JavaScript动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 员工管理视图 -->
+            <section id="employees-view" class="view">
+                <div class="section-header">
+                    <h2>员工管理</h2>
+                    <button class="btn btn-primary" id="addEmployeeBtn">+ 添加员工</button>
+                </div>
+                <div class="employee-list" id="employeeList">
+                    <!-- 员工列表将由JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 班次设置视图 -->
+            <section id="shifts-view" class="view">
+                <div class="section-header">
+                    <h2>班次设置</h2>
+                    <button class="btn btn-primary" id="addShiftBtn">+ 添加班次</button>
+                </div>
+                <div class="shift-list" id="shiftList">
+                    <!-- 班次列表将由JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 分店管理视图 -->
+            <section id="stores-view" class="view">
+                <div class="section-header">
+                    <h2>分店管理</h2>
+                    <button class="btn btn-primary" id="addStoreBtn">+ 添加分店</button>
+                </div>
+                <div class="store-list" id="storeList">
+                    <!-- 分店列表将由JavaScript动态生成 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 侧边栏 - 员工快速选择 -->
+        <aside class="sidebar">
+            <h3>员工列表</h3>
+            <div class="employee-quick-list" id="employeeQuickList">
+                <!-- 快速员工列表将由JavaScript动态生成 -->
+            </div>
+            <div class="sidebar-actions">
+                <button class="btn btn-secondary" id="exportBtn">📥 导出数据</button>
+                <button class="btn btn-secondary" id="importBtn">📤 导入数据</button>
+                <button class="btn btn-danger" id="resetBtn">🔄 重置数据</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+            </div>
+        </aside>
+    </div>
+
+    <!-- 模态框 - 添加/编辑员工 -->
+    <div class="modal" id="employeeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="employeeModalTitle">添加员工</h3>
+                <button class="close-btn" data-close="employeeModal">&times;</button>
+            </div>
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+                <div class="form-group">
+                    <label for="employeeName">姓名 *</label>
+                    <input type="text" id="employeeName" required>
+                </div>
+                <div class="form-group">
+                    <label for="employeePosition">职位 *</label>
+                    <select id="employeePosition" required>
+                        <option value="">请选择职位</option>
+                        <option value="店长">店长</option>
+                        <option value="副店长">副店长</option>
+                        <option value="咖啡师">咖啡师</option>
+                        <option value="收银员">收银员</option>
+                        <option value="服务员">服务员</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="employeePhone">联系电话</label>
+                    <input type="tel" id="employeePhone" placeholder="13800138000">
+                </div>
+                <div class="form-group">
+                    <label for="employeeEmail">邮箱</label>
+                    <input type="email" id="employeeEmail" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="employeeColor">显示颜色</label>
+                    <input type="color" id="employeeColor" value="#3498db">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="employeeModal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 模态框 - 添加/编辑班次 -->
+    <div class="modal" id="shiftModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="shiftModalTitle">添加班次</h3>
+                <button class="close-btn" data-close="shiftModal">&times;</button>
+            </div>
+            <form id="shiftForm">
+                <input type="hidden" id="shiftId">
+                <div class="form-group">
+                    <label for="shiftName">班次名称 *</label>
+                    <input type="text" id="shiftName" required placeholder="例如：早班">
+                </div>
+                <div class="form-group">
+                    <label for="shiftStartTime">开始时间 *</label>
+                    <input type="time" id="shiftStartTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="shiftEndTime">结束时间 *</label>
+                    <input type="time" id="shiftEndTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="shiftColor">显示颜色</label>
+                    <input type="color" id="shiftColor" value="#2ecc71">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="shiftModal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 模态框 - 分配班次 -->
+    <div class="modal" id="assignModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>分配班次</h3>
+                <button class="close-btn" data-close="assignModal">&times;</button>
+            </div>
+            <form id="assignForm">
+                <div class="form-group">
+                    <label for="assignDate">日期 *</label>
+                    <input type="date" id="assignDate" name="assignDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignShift">选择班次 *</label>
+                    <select id="assignShift" name="assignShift" required>
+                        <option value="">请选择班次</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assignStore">选择分店 *</label>
+                    <select id="assignStore" name="assignStore" required>
+                        <option value="">请选择分店</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assignEmployee">选择员工 *</label>
+                    <select id="assignEmployee" name="assignEmployee" required>
+                        <option value="">请选择员工</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="assignModal">取消</button>
+                    <button type="submit" class="btn btn-primary">分配</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 模态框 - 添加/编辑分店 -->
+    <div class="modal" id="storeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="storeModalTitle">添加分店</h3>
+                <button class="close-btn" data-close="storeModal">&times;</button>
+            </div>
+            <form id="storeForm">
+                <input type="hidden" id="storeId">
+                <div class="form-group">
+                    <label for="storeName">分店名称 *</label>
+                    <input type="text" id="storeName" required placeholder="例如：朝阳店">
+                </div>
+                <div class="form-group">
+                    <label for="storeAddress">地址</label>
+                    <input type="text" id="storeAddress" placeholder="例如：朝阳区建国路88号">
+                </div>
+                <div class="form-group">
+                    <label for="storePhone">联系电话</label>
+                    <input type="tel" id="storePhone" placeholder="010-12345678">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="storeModal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 模态框 - 查看当日排班 -->
+    <div class="modal" id="dayScheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>当日排班详情</h3>
+                <button class="close-btn" data-close="dayScheduleModal">&times;</button>
+            </div>
+            <div class="day-schedule-content" id="dayScheduleContent">
+                <!-- 当日排班详情将由JavaScript动态生成 -->
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-close="dayScheduleModal">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/storage.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/employee.js"></script>
+    <script src="js/shift.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/scheduleImage.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

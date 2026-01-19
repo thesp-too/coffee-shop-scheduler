@@ -1,0 +1,341 @@
+/* 日历控件样式 */
+.calendar-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.current-week {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    min-width: 200px;
+    text-align: center;
+}
+
+.calendar-container {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+}
+
+.day-header {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.day-header:last-child {
+    border-right: none;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    min-height: 400px;
+}
+
+.calendar-day {
+    border: 1px solid var(--border-color);
+    min-height: 120px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background-color: #f9f9f9;
+}
+
+.calendar-day.today {
+    background-color: rgba(139, 69, 19, 0.05);
+}
+
+.calendar-day.other-month {
+    background-color: #fafafa;
+    opacity: 0.5;
+}
+
+.day-date {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.day-number {
+    font-size: 1.1rem;
+}
+
+.day-month {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.today .day-number {
+    color: var(--primary-color);
+}
+
+/* 天气显示样式 */
+.day-weather {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.weather-icon {
+    font-size: 1rem;
+}
+
+.weather-text {
+    color: #555;
+    font-weight: 500;
+}
+
+.weather-temp {
+    color: #666;
+    font-size: 0.7rem;
+    margin-left: auto;
+}
+
+.day-shifts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.shift-item {
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.shift-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shift-item-name {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.shift-item-employee {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.shift-item-time {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.add-shift-btn {
+    width: 100%;
+    padding: 0.4rem;
+    background: none;
+    border: 2px dashed var(--border-color);
+    border-radius: 4px;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    margin-top: 0.3rem;
+}
+
+.add-shift-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: rgba(139, 69, 19, 0.05);
+}
+
+/* 当日排班详情 */
+.day-schedule-content {
+    padding: 1.5rem;
+}
+
+.day-schedule-item {
+    background-color: var(--light-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.day-schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.day-schedule-shift {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.day-schedule-time {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.day-schedule-employee {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.day-schedule-employee-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.day-schedule-employee-name {
+    font-weight: 500;
+}
+
+.day-schedule-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* 响应式日历 */
+@media (max-width: 1024px) {
+    .calendar-header {
+        font-size: 0.9rem;
+    }
+    
+    .day-header {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .calendar-day {
+        min-height: 100px;
+        padding: 0.3rem;
+    }
+    
+    .day-number {
+        font-size: 1rem;
+    }
+    
+    .shift-item {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .calendar-controls .btn {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .calendar-header {
+        display: none;
+    }
+    
+    .calendar-body {
+        grid-template-columns: 1fr;
+    }
+    
+    .calendar-day {
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        min-height: auto;
+    }
+    
+    .calendar-day::before {
+        content: attr(data-day-name);
+        font-weight: 600;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .day-date {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+    
+    .shift-item {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* 日历动画 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.shift-item {
+    animation: slideIn 0.3s ease;
+}
+
+/* 拖拽样式 */
+.shift-item.dragging {
+    opacity: 0.5;
+    cursor: move;
+}
+
+.calendar-day.drag-over {
+    background-color: rgba(139, 69, 19, 0.1);
+    border: 2px dashed var(--primary-color);
+}
+
+/* 统计信息 */
+.day-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.day-stat {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.day-stat-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}

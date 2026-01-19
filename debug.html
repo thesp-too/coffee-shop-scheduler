@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 { color: #8B4513; }
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #8B4513;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 调试页面</h1>
+    
+    <div class="container">
+        <h3>JavaScript 加载测试</h3>
+        <div id="loadTest"></div>
+    </div>
+
+    <div class="container">
+        <h3>数据初始化测试</h3>
+        <div id="dataTest"></div>
+        <button onclick="testInit()">测试初始化</button>
+    </div>
+
+    <div class="container">
+        <h3>控制台日志</h3>
+        <div id="consoleLog"></div>
+    </div>
+
+    <div class="container">
+        <h3>操作</h3>
+        <button onclick="location.href='/'">返回主页面</button>
+        <button onclick="clearLocalStorage()">清空 localStorage</button>
+    </div>
+
+    <script>
+        // 捕获控制台输出
+        const consoleLog = document.getElementById('consoleLog');
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        function addLog(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleLog.appendChild(div);
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'info');
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'info');
+        };
+
+        // 测试JavaScript加载
+        async function testJSLoad() {
+            const loadTest = document.getElementById('loadTest');
+            const scripts = [
+                'js/storage.js',
+                'js/store.js',
+                'js/employee.js',
+                'js/shift.js',
+                'js/schedule.js',
+                'js/scheduleImage.js',
+                'js/app.js'
+            ];
+
+            let results = [];
+            for (const script of scripts) {
+                try {
+                    const response = await fetch(script);
+                    if (response.ok) {
+                        results.push(`✅ ${script} - 加载成功`);
+                    } else {
+                        results.push(`❌ ${script} - 加载失败 (${response.status})`);
+                    }
+                } catch (error) {
+                    results.push(`❌ ${script} - 网络错误: ${error.message}`);
+                }
+            }
+            loadTest.innerHTML = results.map(r => `<div class="log">${r}</div>`).join('');
+        }
+
+        // 测试数据初始化
+        function testInit() {
+            const dataTest = document.getElementById('dataTest');
+            
+            try {
+                // 检查Storage模块
+                if (typeof Storage === 'undefined') {
+                    dataTest.innerHTML = '<div class="log error">❌ Storage 模块未加载</div>';
+                    return;
+                }
+
+                // 检查数据
+                const stores = Storage.getStores();
+                const employees = Storage.getEmployees();
+                const shifts = Storage.getShifts();
+
+                let html = `
+                    <div class="log">分店数量: ${stores.length}</div>
+                    <div class="log">员工数量: ${employees.length}</div>
+                    <div class="log">班次数量: ${shifts.length}</div>
+                `;
+
+                if (stores.length === 0) {
+                    html += '<div class="log error">❌ 没有分店数据</div>';
+                    // 创建默认数据
+                    const defaultStores = [
+                        { id: 'store1', name: '朝阳总店', address: '朝阳区建国路88号', phone: '010-12345678' },
+                        { id: 'store2', name: '海淀分店', address: '海淀区中关村大街100号', phone: '010-23456789' }
+                    ];
+                    Storage.saveStores(defaultStores);
+                    html += '<div class="log success">✅ 已创建默认分店</div>';
+                }
+
+                if (employees.length === 0) {
+                    html += '<div class="log error">❌ 没有员工数据</div>';
+                    const defaultEmployees = [
+                        { id: 'emp1', name: '张三', position: '咖啡师', phone: '13800138001', color: '#e74c3c' },
+                        { id: 'emp2', name: '李四', position: '收银员', phone: '13800138002', color: '#f39c12' }
+                    ];
+                    Storage.saveEmployees(defaultEmployees);
+                    html += '<div class="log success">✅ 已创建默认员工</div>';
+                }
+
+                if (shifts.length === 0) {
+                    html += '<div class="log error">❌ 没有班次数据</div>';
+                    const defaultShifts = [
+                        { id: 'shift1', name: '早班', startTime: '07:00', endTime: '14:00', color: '#3498db' },
+                        { id: 'shift2', name: '中班', startTime: '14:00', endTime: '21:00', color: '#2ecc71' }
+                    ];
+                    Storage.saveShifts(defaultShifts);
+                    html += '<div class="log success">✅ 已创建默认班次</div>';
+                }
+
+                dataTest.innerHTML = html;
+            } catch (error) {
+                dataTest.innerHTML = `<div class="log error">❌ 错误: ${error.message}</div>`;
+            }
+        }
+
+        function clearLocalStorage() {
+            if (confirm('确定要清空所有数据吗？')) {
+                localStorage.clear();
+                addLog('localStorage 已清空', 'info');
+                testInit();
+            }
+        }
+
+        // 页面加载时执行测试
+        testJSLoad();
+        addLog('调试页面已加载', 'success');
+        addLog('当前协议: ' + window.location.protocol, 'info');
+        addLog('当前主机: ' + window.location.host, 'info');
+    </script>
+</body>
+</html>

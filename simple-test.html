@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简单测试</title>
+</head>
+<body>
+    <h1>JavaScript 加载测试</h1>
+    <div id="result"></div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/employee.js"></script>
+    <script src="js/shift.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/scheduleImage.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        const result = document.getElementById('result');
+
+        // 检查各个模块是否加载
+        const checks = [
+            { name: 'Storage', exists: typeof Storage !== 'undefined' },
+            { name: 'StoreManager', exists: typeof StoreManager !== 'undefined' },
+            { name: 'EmployeeManager', exists: typeof EmployeeManager !== 'undefined' },
+            { name: 'ShiftManager', exists: typeof ShiftManager !== 'undefined' },
+            { name: 'ScheduleManager', exists: typeof ScheduleManager !== 'undefined' },
+            { name: 'ScheduleImageGenerator', exists: typeof ScheduleImageGenerator !== 'undefined' },
+            { name: 'App', exists: typeof App !== 'undefined' }
+        ];
+
+        let html = '<ul>';
+        checks.forEach(check => {
+            const status = check.exists ? '✅' : '❌';
+            const color = check.exists ? 'green' : 'red';
+            html += `<li style="color: ${color}">${status} ${check.name}</li>`;
+        });
+        html += '</ul>';
+
+        // 检查数据
+        if (typeof Storage !== 'undefined') {
+            const stores = Storage.getStores();
+            const employees = Storage.getEmployees();
+            const shifts = Storage.getShifts();
+
+            html += '<h3>数据状态:</h3>';
+            html += `<ul>`;
+            html += `<li>分店: ${stores.length}</li>`;
+            html += `<li>员工: ${employees.length}</li>`;
+            html += `<li>班次: ${shifts.length}</li>`;
+            html += `</ul>`;
+        }
+
+        result.innerHTML = html;
+
+        // 如果没有数据，初始化
+        if (typeof Storage !== 'undefined' && Storage.getStores().length === 0) {
+            console.log('正在初始化数据...');
+            if (typeof App !== 'undefined') {
+                App.init();
+            }
+        }
+    </script>
+</body>
+</html>

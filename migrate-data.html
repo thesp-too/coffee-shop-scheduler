@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据迁移工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #8B4513;
+            color: white;
+        }
+        .btn-secondary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 咖啡店排班系统 - 数据迁移工具</h1>
+        
+        <div class="section info">
+            <h3>ℹ️ 说明</h3>
+            <p>这个工具帮助您在 <strong>file://</strong> 协议和 <strong>http://localhost:8080</strong> 之间迁移数据。</p>
+            <p>localStorage 是根据协议隔离的，所以直接打开 index.html 和通过服务器访问的数据是分开的。</p>
+        </div>
+
+        <div class="section">
+            <h3>📊 当前数据状态</h3>
+            <div id="dataStatus"></div>
+        </div>
+
+        <div class="section">
+            <h3>📥 导出当前数据</h3>
+            <p>导出当前协议下的所有数据到 JSON 文件：</p>
+            <button class="btn btn-primary" onclick="exportData()">导出数据</button>
+            <div id="exportStatus"></div>
+        </div>
+
+        <div class="section">
+            <h3>📤 导入数据</h3>
+            <p>从 JSON 文件导入数据到当前协议：</p>
+            <input type="file" id="importFile" accept=".json" style="margin: 10px 0;">
+            <br>
+            <button class="btn btn-secondary" onclick="importData()">导入数据</button>
+            <div id="importStatus"></div>
+        </div>
+
+        <div class="section">
+            <h3>🗑️ 清空数据</h3>
+            <p>清空当前协议下的所有数据：</p>
+            <button class="btn btn-success" onclick="clearData()">清空数据</button>
+            <div id="clearStatus"></div>
+        </div>
+
+        <div class="section warning">
+            <h3>⚠️ 使用建议</h3>
+            <ol>
+                <li>如果您之前直接打开 index.html 使用，请先点击"导出数据"保存数据</li>
+                <li>然后访问 http://localhost:8080 使用这个工具导入数据</li>
+                <li>或者直接在 http://localhost:8080 上重新开始使用</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const KEYS = {
+            EMPLOYEES: 'coffee_shop_employees',
+            SHIFTS: 'coffee_shop_shifts',
+            SCHEDULES: 'coffee_shop_schedules',
+            STORES: 'coffee_shop_stores',
+            INITIALIZED: 'coffee_shop_initialized'
+        };
+
+        function getData() {
+            return {
+                employees: JSON.parse(localStorage.getItem(KEYS.EMPLOYEES) || '[]'),
+                shifts: JSON.parse(localStorage.getItem(KEYS.SHIFTS) || '[]'),
+                schedules: JSON.parse(localStorage.getItem(KEYS.SCHEDULES) || '{}'),
+                stores: JSON.parse(localStorage.getItem(KEYS.STORES) || '[]'),
+                initialized: localStorage.getItem(KEYS.INITIALIZED) === 'true'
+            };
+        }
+
+        function showDataStatus() {
+            const data = getData();
+            const status = document.getElementById('dataStatus');
+            
+            status.innerHTML = `
+                <p><strong>当前协议:</strong> ${window.location.protocol}</p>
+                <p><strong>当前主机:</strong> ${window.location.host}</p>
+                <p><strong>员工数量:</strong> ${data.employees.length}</p>
+                <p><strong>班次数量:</strong> ${data.shifts.length}</p>
+                <p><strong>分店数量:</strong> ${data.stores.length}</p>
+                <p><strong>排班记录:</strong> ${Object.keys(data.schedules).length} 天</p>
+                <p><strong>已初始化:</strong> ${data.initialized ? '是' : '否'}</p>
+            `;
+        }
+
+        function exportData() {
+            const data = getData();
+            const exportData = {
+                version: '1.0',
+                exportDate: new Date().toISOString(),
+                protocol: window.location.protocol,
+                host: window.location.host,
+                ...data
+            };
+            
+            const jsonStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `coffee-shop-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            document.getElementById('exportStatus').innerHTML = 
+                '<div class="status success">✅ 数据导出成功！</div>';
+        }
+
+        function importData() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                document.getElementById('importStatus').innerHTML = 
+                    '<div class="status warning">⚠️ 请先选择文件</div>';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // 导入数据
+                    if (data.employees) {
+                        localStorage.setItem(KEYS.EMPLOYEES, JSON.stringify(data.employees));
+                    }
+                    if (data.shifts) {
+                        localStorage.setItem(KEYS.SHIFTS, JSON.stringify(data.shifts));
+                    }
+                    if (data.schedules) {
+                        localStorage.setItem(KEYS.SCHEDULES, JSON.stringify(data.schedules));
+                    }
+                    if (data.stores) {
+                        localStorage.setItem(KEYS.STORES, JSON.stringify(data.stores));
+                    }
+                    if (data.initialized) {
+                        localStorage.setItem(KEYS.INITIALIZED, 'true');
+                    }
+                    
+                    document.getElementById('importStatus').innerHTML = 
+                        '<div class="status success">✅ 数据导入成功！页面将刷新...</div>';
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } catch (error) {
+                    document.getElementById('importStatus').innerHTML = 
+                        '<div class="status warning">❌ 导入失败：' + error.message + '</div>';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearData() {
+            if (confirm('确定要清空所有数据吗？此操作不可恢复！')) {
+                localStorage.removeItem(KEYS.EMPLOYEES);
+                localStorage.removeItem(KEYS.SHIFTS);
+                localStorage.removeItem(KEYS.SCHEDULES);
+                localStorage.removeItem(KEYS.STORES);
+                localStorage.removeItem(KEYS.INITIALIZED);
+                
+                document.getElementById('clearStatus').innerHTML = 
+                    '<div class="status success">✅ 数据已清空！页面将刷新...</div>';
+                
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            }
+        }
+
+        // 页面加载时显示数据状态
+        showDataStatus();
+    </script>
+</body>
+</html>

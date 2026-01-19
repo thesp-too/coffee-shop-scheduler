@@ -7,16 +7,63 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>百分之一员工排班系统</title>
     <style>
-        /* 移动端强制隐藏导航 */
-        @media (max-width: 768px) {
-            .nav-tabs { display: none !important; }
-            .header { padding: 0.8rem 1rem !important; }
-            .header h1 { font-size: 1.2rem !important; margin-bottom: 0 !important; }
-            .main-content { padding: 0.3rem !important; }
-        }
         /* 隐藏员工列表侧边栏 */
         .sidebar { display: none !important; }
         .main-content { margin-right: 0 !important; }
+        
+        /* 移动端菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            line-height: 1;
+        }
+        
+        .header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 移动端样式 */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block !important; }
+            .header { padding: 0.8rem 1rem !important; }
+            .header h1 { font-size: 1.2rem !important; margin-bottom: 0 !important; }
+            .main-content { padding: 0.3rem !important; }
+            
+            /* 默认隐藏导航 */
+            .nav-tabs {
+                display: none !important;
+                flex-direction: column !important;
+                gap: 0 !important;
+                margin-top: 0.8rem !important;
+                background: rgba(255,255,255,0.1);
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            /* 显示菜单时 */
+            .nav-tabs.show {
+                display: flex !important;
+            }
+            
+            .nav-tab {
+                width: 100% !important;
+                text-align: left !important;
+                border-radius: 0 !important;
+                padding: 0.8rem 1rem !important;
+                background: rgba(255,255,255,0.1) !important;
+            }
+            
+            .nav-tab.active {
+                background: rgba(255,255,255,0.3) !important;
+            }
+        }
     </style>
     <link rel="stylesheet" href="css/styles.css?v=3">
     <link rel="stylesheet" href="css/calendar.css?v=3">
@@ -25,8 +72,11 @@
     <div class="container">
         <!-- 头部 -->
         <header class="header">
-            <h1>☕ 百分之一排班系统</h1>
-            <nav class="nav-tabs hide-on-mobile">
+            <div class="header-title">
+                <h1>☕ 百分之一排班系统</h1>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+            <nav class="nav-tabs" id="navTabs">
                 <button class="nav-tab active" data-tab="schedule">排班日历</button>
                 <button class="nav-tab" data-tab="employees">员工管理</button>
                 <button class="nav-tab" data-tab="shifts">班次设置</button>
@@ -286,5 +336,29 @@
     <script src="js/schedule.js"></script>
     <script src="js/scheduleImage.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- 移动端菜单功能 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navTabs = document.getElementById('navTabs');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navTabs.classList.toggle('show');
+                });
+                
+                // 点击导航项后自动关闭菜单
+                const navButtons = navTabs.querySelectorAll('.nav-tab');
+                navButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            navTabs.classList.remove('show');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
